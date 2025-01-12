@@ -1,0 +1,35 @@
+---
+- name: Clone and Deploy golang-web-app on production servers
+  hosts: prod
+  become: yes
+  tasks:
+    - name: Clone the git repo
+      ansible.builtin.git:
+        repo: https://github.com/Ramya-R74/golang-web-app.git
+        dest: /home/ubuntu/golang-web-app
+        single_branch: yes
+        version: main
+
+    - name: Update the system
+      ansible.builtin.apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Install Docker
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    - name: Ensure Docker service is running
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Build Docker image for golang-web-app
+      command: docker build -t go-web-app:latest /home/ubuntu/golang-web-app
+
+    - name: Run the golang-web-app container
+      command: docker run -d -p 8080:8080 --name go-web-app go-web-app:latest
+
