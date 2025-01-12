@@ -1,0 +1,13 @@
+all:
+  children:
+    dev:
+      hosts:
+        dev-server1:
+          ansible_host: 13.61.142.75
+    prod:
+      hosts:
+        prod-server1:
+          ansible_host: 13.60.89.233
+        
+      
+

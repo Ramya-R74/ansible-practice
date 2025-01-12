@@ -1,0 +1,37 @@
+---
+- name: Install Nginx on dev and prod servers
+  hosts: dev:prod
+  become: yes
+  tasks:
+    - name: Install nginx
+      ansible.builtin.yum:
+        name: nginx
+        state: latest
+      when: ansible_os_family == "RedHat"
+
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: latest
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure Nginx is installed (Redhat-based)
+      ansible.builtin.yum:
+        name: nginx
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "RedHat"
+
+    - name: Ensure Nginx is installed (Debian-based)
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure Nginx is started and enabled
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+

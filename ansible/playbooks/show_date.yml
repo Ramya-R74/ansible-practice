@@ -1,0 +1,13 @@
+-
+  name: My first playbook
+  hosts: prod
+  tasks:
+
+    - name: Show Date of Servers
+      command: date
+
+    - name: Show logged in user
+      command: whoami
+
+    - name: Show the server uptime
+      command: uptime
