@@ -1,0 +1,33 @@
+---
+- name: Deploy webapp on dev and prod servers
+  hosts: dev:prod
+  become: yes
+  tasks:
+    - name: Ensure Nginx is installed
+      ansible.builtin.yum:
+        name: nginx
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Ensure Nginx is installed (Debian-based)
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure /var/www/html exists
+      ansible.builtin.file:
+        path: /var/www/html
+        state: directory
+
+    - name: Deploy webapp
+      ansible.builtin.copy:
+        src: /home/ec2-user/ansible-practice/projects/index.html
+        dest: /var/www/html/
+
+    - name: Restart Nginx to load new files
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+
