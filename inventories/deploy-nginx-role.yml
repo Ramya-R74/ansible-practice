@@ -1,0 +1,7 @@
+---
+- name: Deploy webapp via role
+  hosts: prod
+  become: yes
+  roles:
+    - nginx
+

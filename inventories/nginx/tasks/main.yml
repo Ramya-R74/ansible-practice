@@ -1,0 +1,22 @@
+---
+# tasks file for nginx
+#
+- name: Install NGINX
+  apt:
+    name: nginx
+    state: latest
+
+- name: Start NGINX
+  service:
+    name: nginx
+    state: started
+
+- name: Enable NGINX
+  service:
+    name: nginx
+    enabled: yes
+
+- name: Deploy webapp
+  copy:
+    src: index.html
+    dest: /var/www/html
